@@ -1,0 +1,64 @@
+# ============================================================
+# MoneyMate — Root .gitignore
+# Covers: .NET 10 Web API + React 19 / Vite / TypeScript
+# ============================================================
+
+# ------------------------------------------------
+# .NET / Visual Studio build artifacts
+# ------------------------------------------------
+bin/
+obj/
+.vs/
+
+# Visual Studio user-specific files
+*.user
+*.userosscache
+*.suo
+*.DotSettings.user
+
+# ------------------------------------------------
+# ASP.NET Core local developer configuration
+# Override files contain local DB names and are
+# machine-specific — each developer manages their own.
+# ------------------------------------------------
+**/appsettings.Development.json
+**/appsettings.*.local.json
+
+# Environment variable files (never commit secrets)
+.env
+.env.*
+!.env.example
+
+# ------------------------------------------------
+# Node.js / Vite / React build artifacts
+# ------------------------------------------------
+node_modules/
+dist/
+dist-ssr/
+
+# Vite / tooling local config
+*.local
+
+# ------------------------------------------------
+# Logs (from any tool)
+# ------------------------------------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ------------------------------------------------
+# OS / Editor generated files
+# ------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+
+# VSCode (keep task/launch/extensions recommendations)
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
