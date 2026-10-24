@@ -1,0 +1,8 @@
+{
+  "name": "MoneyMate",
+  "description": "Personal finance management application to track income and expenses, monitor monthly budgets, view cash flow trends, and manage savings goals.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

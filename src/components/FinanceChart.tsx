@@ -1,4 +1,3 @@
-
 import { useMemo, useState } from "react";
 import {
   ResponsiveContainer,
@@ -42,14 +41,14 @@ type CategoryItem = {
 };
 
 const CATEGORY_COLORS = [
-  "#16a34a",
-  "#2563eb",
-  "#f59e0b",
-  "#8b5cf6",
-  "#ec4899",
-  "#0f766e",
-  "#ea580c",
-  "#64748b",
+  "#75E0A7", // Soft Mint Green
+  "#60A5FA", // Sky Blue
+  "#FBBF24", // Amber
+  "#A78BFA", // Violet Purple
+  "#F87171", // Coral Rose
+  "#2DD4BF", // Teal
+  "#FB923C", // Warm Orange
+  "#94A3B8", // Slate Muted
 ];
 
 function getCurrentMonth(): string {
@@ -152,7 +151,10 @@ export default function FinanceChart({
       )
       .forEach((transaction) => {
         const category = transaction.category || "Khác";
-        totals.set(category, (totals.get(category) ?? 0) + Number(transaction.amount));
+        totals.set(
+          category,
+          (totals.get(category) ?? 0) + Number(transaction.amount)
+        );
       });
 
     return Array.from(totals, ([name, value]) => ({ name, value })).sort(
@@ -162,15 +164,16 @@ export default function FinanceChart({
 
   const showDailyPrompt = mode === "day" && selectedMonth === "all";
   const chartData = mode === "month" ? monthlyData : dailyData;
+  const hasCashflowData = chartData.some((item) => item.income > 0 || item.expense > 0);
 
   return (
     <section className="panel chart-panel">
       <h2>
-        <BarChart3 size={22} />
+        <BarChart3 size={20} />
         Thống kê thu chi
       </h2>
 
-      <div className="chart-mode-switch">
+      <div className="chart-mode-switch" role="group" aria-label="Chế độ xem biểu đồ">
         <button
           type="button"
           className={mode === "day" ? "active" : ""}
@@ -193,46 +196,62 @@ export default function FinanceChart({
       <p className="subtitle">
         {mode === "day"
           ? selectedMonth === "all"
-            ? "Chọn một tháng ở bộ lọc phía trên để xem biểu đồ theo ngày."
-            : `Thu nhập và chi tiêu từng ngày — ${formatMonth(selectedMonth)}`
-          : "So sánh thu nhập và chi tiêu theo tháng."}
+            ? "Chọn một tháng cụ thể ở bộ lọc để xem chi tiết theo ngày."
+            : `Biến động thu nhập và chi tiêu từng ngày — ${formatMonth(selectedMonth)}`
+          : "So sánh tổng thu nhập và tổng chi tiêu qua các tháng."}
       </p>
 
       {showDailyPrompt ? (
         <p className="empty">
-          Chọn một tháng ở bộ lọc phía trên để xem biểu đồ theo ngày.
+          Hãy chọn một tháng cụ thể ở bộ lọc phía trên để xem biểu đồ chi tiết theo từng ngày.
         </p>
-      ) : chartData.length === 0 ? (
-        <p className="empty">Chưa có dữ liệu để hiển thị biểu đồ.</p>
+      ) : !hasCashflowData ? (
+        <p className="empty">Không có giao dịch thu chi trong kỳ này để hiển thị biểu đồ.</p>
       ) : (
         <div className="finance-chart">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={chartData}
-              margin={{ top: 20, right: 12, left: 12, bottom: 8 }}
+              margin={{ top: 16, right: 12, left: 12, bottom: 8 }}
             >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <CartesianGrid stroke="#252932" strokeDasharray="3 3" vertical={false} />
 
               <XAxis
                 dataKey={mode === "month" ? "month" : "day"}
                 tickFormatter={(value: string) =>
                   mode === "month" ? shortMonth(value) : value
                 }
-                interval={mode === "day" ? 3 : 0}
+                tick={{ fill: "#9299A4", fontSize: 12 }}
+                tickLine={false}
+                axisLine={{ stroke: "#30343B" }}
+                interval={mode === "day" ? 2 : 0}
               />
 
               <YAxis
-                width={75}
+                width={70}
                 tickFormatter={(value: number) =>
                   value >= 1_000_000
                     ? `${(value / 1_000_000).toLocaleString("vi-VN", {
                         maximumFractionDigits: 1,
-                      })}tr`
+                      })} tr`
                     : value.toLocaleString("vi-VN")
                 }
+                tick={{ fill: "#9299A4", fontSize: 12 }}
+                tickLine={false}
+                axisLine={false}
               />
 
               <Tooltip
+                contentStyle={{
+                  backgroundColor: "#1B1E24",
+                  borderRadius: "8px",
+                  border: "1px solid #30343B",
+                  boxShadow: "0 6px 18px rgba(0, 0, 0, 0.45)",
+                  fontSize: "13px",
+                  color: "#F4F6F8",
+                }}
+                itemStyle={{ color: "#F4F6F8" }}
+                labelStyle={{ color: "#9299A4", fontWeight: 600, marginBottom: "4px" }}
                 labelFormatter={(label) => {
                   if (mode === "month") {
                     return formatMonth(String(label));
@@ -248,20 +267,28 @@ export default function FinanceChart({
                 formatter={(value) => [formatMoney(Number(value))]}
               />
 
-              <Legend />
+              <Legend
+                wrapperStyle={{
+                  paddingTop: "12px",
+                  fontSize: "13px",
+                  color: "#9299A4",
+                }}
+              />
 
               <Bar
                 dataKey="income"
                 name="Thu nhập"
-                fill="#16a34a"
-                radius={[5, 5, 0, 0]}
+                fill="#75E0A7"
+                radius={[4, 4, 0, 0]}
+                maxBarSize={36}
               />
 
               <Bar
                 dataKey="expense"
                 name="Chi tiêu"
-                fill="#ef4444"
-                radius={[5, 5, 0, 0]}
+                fill="#F87171"
+                radius={[4, 4, 0, 0]}
+                maxBarSize={36}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -271,6 +298,10 @@ export default function FinanceChart({
       {categoryData.length > 0 && (
         <div className="category-chart-section">
           <h3>Chi tiêu theo danh mục</h3>
+          <p className="subtitle">
+            Phân bổ cơ cấu chi tiêu trong {formatMonth(selectedMonth)}
+          </p>
+
           <div className="category-chart">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -279,11 +310,12 @@ export default function FinanceChart({
                   dataKey="value"
                   nameKey="name"
                   cx="50%"
-                  cy="50%"
-                  outerRadius={92}
-                  label={({ name, percent }) =>
-                    `${name} ${(Number(percent) * 100).toFixed(0)}%`
-                  }
+                  cy="45%"
+                  innerRadius={50}
+                  outerRadius={88}
+                  paddingAngle={2}
+                  stroke="#1B1E24"
+                  strokeWidth={2}
                 >
                   {categoryData.map((item, index) => (
                     <Cell
@@ -292,8 +324,32 @@ export default function FinanceChart({
                     />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => formatMoney(Number(value))} />
-                <Legend />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#1B1E24",
+                    borderRadius: "8px",
+                    border: "1px solid #30343B",
+                    boxShadow: "0 6px 18px rgba(0, 0, 0, 0.45)",
+                    fontSize: "13px",
+                    color: "#F4F6F8",
+                  }}
+                  itemStyle={{ color: "#F4F6F8" }}
+                  labelStyle={{ color: "#9299A4", fontWeight: 600, marginBottom: "4px" }}
+                  formatter={(value, name) => [
+                    formatMoney(Number(value)),
+                    `${String(name)}`,
+                  ]}
+                />
+                <Legend
+                  layout="horizontal"
+                  verticalAlign="bottom"
+                  align="center"
+                  wrapperStyle={{
+                    paddingTop: "14px",
+                    fontSize: "12.5px",
+                    color: "#9299A4",
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>

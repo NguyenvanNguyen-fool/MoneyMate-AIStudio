@@ -1,297 +1,105 @@
-# MoneyMate — Personal Finance Management Web Application
+# 💰 MoneyMate — Personal Finance Management
 
-MoneyMate is a full-stack personal finance web application built with **ASP.NET Core Web API (.NET 10)**, **Entity Framework Core**, **SQL Server**, and **React 19 + TypeScript + Vite**.
-
-It is designed to help individuals effortlessly track income and expenses, monitor monthly spending budgets with real-time utilization warnings, visualize cash flow trends, and set financial savings goals.
+> **MoneyMate** là ứng dụng quản lý tài chính cá nhân hiện đại theo phong cách **Premium Dark Fintech**. Ứng dụng giúp theo dõi thu chi, phân tích dòng tiền thông minh bằng biểu đồ trực quan, kiểm soát ngân sách tháng và đồng hành cùng các mục tiêu tiết kiệm dài hạn.
 
 ---
 
-## Table of Contents
+## ✨ Điểm nổi bật (Key Features)
 
-- [Key Features](#key-features)
-- [Technology Stack](#technology-stack)
-- [Architecture & Project Structure](#architecture--project-structure)
-- [Database Schema](#database-schema)
-- [Screenshots](#screenshots)
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-  - [1. Clone Repository](#1-clone-repository)
-  - [2. Configure Database Connection](#2-configure-database-connection)
-  - [3. Apply EF Core Migrations](#3-apply-ef-core-migrations)
-  - [4. Run Backend API](#4-run-backend-api)
-  - [5. Run Frontend Web App](#5-run-frontend-web-app)
-- [API Endpoints Overview](#api-endpoints-overview)
-- [Future Improvements](#future-improvements)
-- [Author & Contact](#author--contact)
+### 1. 📊 Tổng quan tài chính & Chỉ số trọng yếu (Financial Metrics)
+- **Bộ 3 thẻ tài chính cốt lõi**: Tổng thu nhập, Tổng chi tiêu và Số dư tài khoản thực tế.
+- Định dạng tiền tệ VND chuẩn xác, typography sắc nét, màu sắc phân cấp rõ ràng (Xanh lá thu nhập `#75E0A7`, Đỏ hồng chi tiêu `#F87171`, Xanh dương số dư `#60A5FA`).
 
----
+### 2. 📈 Phân tích dòng tiền & Cơ cấu chi tiêu (Interactive Visualizations)
+- **Biểu đồ cột dòng tiền (Recharts)**: Hỗ trợ linh hoạt chuyển đổi xem **Theo ngày** trong tháng hoặc **Theo 6 tháng gần nhất**.
+- **Biểu đồ tròn cơ cấu chi tiêu**: Thống kê tỷ lệ phần trăm theo từng danh mục (Ăn uống, Nhà cửa, Di chuyển, Mua sắm, Giáo dục, v.v.).
+- Tùy biến Dark Theme đồng bộ, Tooltip hiển thị chi tiết và nhạy bén.
 
-## Key Features
+### 3. 💳 Quản lý giao dịch thông minh (Transaction Management)
+- Ghi nhận thu / chi nhanh chóng với bộ lọc danh mục và ngày giao dịch.
+- Hỗ trợ đầy đủ các thao tác CRUD (Tạo mới, Tìm kiếm, Chỉnh sửa, Xóa).
+- Cơ chế validation dữ liệu trực tiếp, hiển thị thông báo lỗi rõ ràng và mượt mà.
 
-- **Transaction Management (CRUD):**
-  - Add, edit, and delete transactions with title, amount, type (`Income` or `Expense`), predefined categories, and date.
-  - Client and server-side validation ensuring valid amounts (> 0), non-empty titles, and proper dates.
-- **Monthly Filtering & Net Balance:**
-  - Dynamic monthly selector filtering transactions by month or viewing all historical records.
-  - Instant financial overview calculation: Total Income, Total Expense, and Net Monthly Cash Flow.
-- **Monthly Budgeting with Smart Progress Tracking:**
-  - Set a monthly spending limit for any specific month.
-  - Automatically calculates total actual expenses in that month, remaining budget, and percentage used.
-  - Dynamic visual alert states:
-    - **Safe** (< 80% usage): Green progress indicator.
-    - **Warning** (80% – 99% usage): Amber indicator alerting close proximity to limit.
-    - **Over Budget** (>= 100% usage): Red alert banner and negative remaining balance.
-- **Visual Analytics & Charting:**
-  - Interactive daily bar chart comparing daily income vs. daily expense.
-  - Monthly aggregation mode for year-round comparison.
-  - Category breakdown pie chart displaying expense distribution.
-- **Savings Goals Tracker:**
-  - Create and track custom savings targets (e.g., emergency fund, laptop, travel).
-  - Displays target amount, saved amount, completion percentage, remaining funds needed, and target dates.
-- **Responsive & Accessible UI:**
-  - Clean, modern finance dashboard with curated green/red semantic indicators.
-  - Fully responsive layout adapting seamlessly from wide desktop monitors to mobile screens.
+### 4. 🎯 Ngân sách chi tiêu tháng (Monthly Budget Tracking)
+- Thiết lập hạn mức chi tiêu cho từng tháng cụ thể.
+- Thanh tiến độ (Progress bar) trực quan với cơ chế cảnh báo thông minh:
+  - 🟢 **Bình thường**: Chi tiêu dưới 80% ngân sách.
+  - 🟡 **Cảnh báo**: Chi tiêu đạt từ 80% - 99% ngân sách.
+  - 🔴 **Vượt ngân sách**: Cảnh báo tức thì khi chi tiêu vượt ngưỡng dự kiến.
+
+### 5. 🏆 Mục tiêu tiết kiệm (Savings Goals)
+- Tạo và theo dõi tiến độ tích lũy tài chính (mua nhà, mua xe, quỹ khẩn cấp, du lịch...).
+- Nạp thêm tiền tích lũy trực tiếp, tự động tính tỷ lệ hoàn thành và gắn huy hiệu đạt mục tiêu.
 
 ---
 
-## Technology Stack
-
-### Backend
-- **Platform:** .NET 10 (C#)
-- **Framework:** ASP.NET Core Web API
-- **ORM:** Entity Framework Core 10 (`Microsoft.EntityFrameworkCore.SqlServer` 10.0.12)
-- **Database:** Microsoft SQL Server / SQL Server Express
-- **API Specification:** ASP.NET Core OpenAPI (`Microsoft.AspNetCore.OpenApi` 10.0.12)
+## 🛠️ Công nghệ sử dụng (Tech Stack)
 
 ### Frontend
-- **Framework:** React 19
-- **Language:** TypeScript
-- **Build Tool:** Vite 8
-- **Data Visualization:** Recharts
-- **Icons:** Lucide React
-- **Styling:** Custom Vanilla CSS Design System (flexbox, CSS grid, CSS custom properties, responsive media queries)
+- **Framework**: React 19 + TypeScript + Vite
+- **Styling**: Tailwind CSS, Custom CSS Variables (Design tokens)
+- **Icons**: Lucide React
+- **Data Visualization**: Recharts
+- **Quality & Linting**: Oxlint
+
+### Backend & Database Integration (API Contract)
+- **Backend Architecture**: ASP.NET Core Web API (.NET)
+- **Database**: SQL Server / Entity Framework Core
+- **API Endpoints**:
+  - `GET /api/transactions` & `POST/PUT/DELETE /api/transactions`
+  - `GET /api/budgets?month=YYYY-MM` & `POST /api/budgets`
+  - `GET /api/goals` & `POST/PUT/DELETE /api/goals`
 
 ---
 
-## Architecture & Project Structure
+## 🎨 Thiết kế giao diện (Design System)
 
-The project maintains a clear separation between the backend REST API service and the modern Single Page Application (SPA) frontend:
-
-- **Backend Pattern:** Controllers directly coordinate data access through EF Core `MoneyMateDbContext` using asynchronous LINQ queries. Validation is performed both at the HTTP request layer and model configuration level.
-- **Frontend Pattern:** A centralized dashboard container (`App.tsx`) orchestrates state management, transaction workflows, and monthly budget calculations, delegating chart visualizations and savings goals to modular child components (`FinanceChart.tsx` and `SavingsGoals.tsx`).
-
-```
-MoneyMate/
-├── docs/
-│   └── screenshots/              # Application screenshots
-│       ├── desktop-dashboard.png
-│       └── mobile-dashboard.png
-├── MoneyMate.Api/                # ASP.NET Core Web API project
-│   ├── Controllers/              # RESTful API controllers
-│   │   ├── TransactionsController.cs
-│   │   ├── BudgetsController.cs
-│   │   ├── SavingsGoalsController.cs
-│   │   └── MoneyMateController.cs
-│   ├── Data/                     # EF Core DbContext and Fluent API mappings
-│   │   └── MoneyMateDbContext.cs
-│   ├── Migrations/               # EF Core database migrations
-│   │   ├── 20261024102301_InitialCreate.cs
-│   │   └── MoneyMateDbContextModelSnapshot.cs
-│   ├── Models/                   # Domain entities and request contracts
-│   │   ├── Transaction.cs
-│   │   ├── MonthlyBudget.cs
-│   │   └── SavingsGoal.cs
-│   ├── appsettings.json          # Configuration & connection strings
-│   ├── Program.cs                # Middleware pipeline, DI, CORS, OpenAPI
-│   └── MoneyMate.Api.csproj
-├── moneymate-web/                # React + TypeScript client project
-│   ├── src/
-│   │   ├── components/           # Presentation components
-│   │   │   ├── FinanceChart.tsx  # Daily/Monthly bar charts & category pie chart
-│   │   │   └── SavingsGoals.tsx  # Savings goals tracker component
-│   │   ├── App.tsx               # Main dashboard controller and state container
-│   │   ├── App.css               # Dashboard layout, forms, panels, responsive media queries
-│   │   ├── index.css             # Root baseline CSS rules
-│   │   └── main.tsx              # React entry point
-│   ├── package.json
-│   └── vite.config.ts
-└── README.md
-```
+Ứng dụng tuân theo ngôn ngữ thiết kế **Premium Dark Fintech**:
+- **Canvas / Background**: Đen than `#111318` dịu mắt, chống mỏi mắt khi sử dụng lâu.
+- **Sidebar & Panels**: `#15181E` tách bạch tinh tế.
+- **Surface Cards**: `#1B1E24` với viền mảnh `#30343B` sang trọng.
+- **Accent Color**: Xanh mint `#75E0A7` tràn đầy năng lượng tích cực về tài chính.
+- **Responsive chuẩn**: Tối ưu hiển thị hoàn hảo trên Desktop (1440px), Tablet (768px) và Mobile (390px).
 
 ---
 
-## Database Schema
+## 🚀 Hướng dẫn cài đặt & Chạy ứng dụng (Getting Started)
 
-Entity Framework Core maps the domain models to three primary relational tables in SQL Server:
+### Yêu cầu môi trường
+- **Node.js**: Phiên bản 18 trở lên
+- **npm** hoặc **bun / pnpm / yarn**
 
-### 1. `Transactions`
-| Column | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| `Id` | `int` | Primary Key, Identity | Unique transaction identifier |
-| `Title` | `nvarchar(200)` | NOT NULL | Transaction title / description |
-| `Amount` | `decimal(18,2)` | NOT NULL | Amount in VND |
-| `Type` | `nvarchar(20)` | NOT NULL | Either `Income` or `Expense` |
-| `Category` | `nvarchar(50)` | NOT NULL, Default: `'Khác'` | Category classification |
-| `TransactionDate` | `datetime2` | NOT NULL | Transaction execution date |
+### Các bước cài đặt
 
-### 2. `MonthlyBudgets`
-| Column | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| `Id` | `int` | Primary Key, Identity | Unique budget identifier |
-| `BudgetMonth` | `date` | NOT NULL, UNIQUE Index | Month of budget (first day, e.g. `2026-10-01`) |
-| `LimitAmount` | `decimal(18,2)` | NOT NULL | Spending threshold limit for the month |
-| `CreatedAt` | `datetime2` | NOT NULL, Default: `SYSDATETIME()` | Record creation timestamp |
-
-### 3. `SavingsGoals`
-| Column | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| `Id` | `int` | Primary Key, Identity | Unique savings goal identifier |
-| `Name` | `nvarchar(200)` | NOT NULL | Name of goal (e.g., "Emergency Fund") |
-| `TargetAmount` | `decimal(18,2)` | NOT NULL | Target amount to save |
-| `SavedAmount` | `decimal(18,2)` | NOT NULL | Currently accumulated amount |
-| `TargetDate` | `date` | NULLABLE | Optional target completion deadline |
-| `CreatedAt` | `datetime2` | NOT NULL, Default: `SYSDATETIME()` | Record creation timestamp |
-
----
-
-## Screenshots
-
-### Desktop Dashboard Overview
-![MoneyMate Desktop Dashboard](docs/screenshots/desktop-dashboard.png)
-
-### Mobile Responsive View
-![MoneyMate Mobile Layout](docs/screenshots/mobile-dashboard.png)
-
----
-
-## Prerequisites
-
-Before running the application, ensure the following tools are installed on your system:
-
-1. **[.NET 10 SDK](https://dotnet.microsoft.com/download)** (Verify via `dotnet --version`)
-2. **[Node.js](https://nodejs.org/)** (v18.0 or newer) and **npm**
-3. **[Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)** (SQL Server Express, Developer, or LocalDB)
-4. **EF Core CLI Global Tool:**
+1. **Clone repository về máy**:
    ```bash
-   dotnet tool install --global dotnet-ef
+   git clone https://github.com/<username>/<repo-name>.git
+   cd <repo-name>
    ```
-   *(If already installed, verify with `dotnet ef --version`)*
+
+2. **Cài đặt dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Cấu hình môi trường**:
+   Sao chép file `.env.example` thành `.env` nếu cần điều chỉnh đường dẫn API Backend:
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Khởi chạy môi trường phát triển (Dev server)**:
+   ```bash
+   npm run dev
+   ```
+   Mở trình duyệt tại: `http://localhost:3000`
+
+5. **Build cho môi trường Production**:
+   ```bash
+   npm run build
+   ```
 
 ---
 
-## Getting Started
-
-### 1. Clone Repository
-
-```bash
-# Replace <your-github-username> with your actual GitHub username before publishing
-git clone https://github.com/<your-github-username>/MoneyMate.git
-cd MoneyMate
-```
-
-### 2. Configure Database Connection
-
-Open `MoneyMate.Api/appsettings.json` to review the default template configuration:
-
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=YOUR_SERVER;Database=MoneyMate;Trusted_Connection=True;TrustServerCertificate=True;"
-  }
-}
-```
-
-> **Configuration Guide:**
-> - **Replace `YOUR_SERVER`**: `YOUR_SERVER` is a placeholder. You must replace it with your actual SQL Server instance name (e.g., `localhost\\SQLEXPRESS`, `localhost`, `(localdb)\\mssqllocaldb`, or `.`).
-> - **Database Name (`MoneyMate`)**: `MoneyMate` is the default sample database name. Ensure your SQL Server instance is running and has permission to create/manage this database, or specify your preferred database name prior to running migrations.
-> - **SQL Server Authentication**: If you are using SQL Server Authentication instead of Windows Authentication (`Trusted_Connection=True`), adjust the connection string to include your credentials:
->   ```
->   Server=YOUR_SERVER;Database=MoneyMate;User Id=YOUR_USERNAME;Password=YOUR_PASSWORD;TrustServerCertificate=True;
->   ```
-> - **Local Development Overrides (`appsettings.Development.json`)**:
->   - The author's personal `appsettings.Development.json` is excluded via `.gitignore` and is not committed to GitHub to protect local environments.
->   - You can create your own `MoneyMate.Api/appsettings.Development.json` locally if you want to override the connection string or logging settings without altering tracked files in Git.
-
-
-### 3. Apply EF Core Migrations
-
-Navigate to the `MoneyMate.Api` directory and apply the initial migration. This command connects to the database defined in your connection string and creates all tables, indexes, and constraints:
-
-```bash
-cd MoneyMate.Api
-dotnet ef database update
-```
-
-When successful, the CLI outputs `Done.`. Your database schema is now ready.
-
-> **Important:**
-> - `dotnet ef database update` is intended for fresh or clean database instances.
-> - If you target an existing database that already contains tables created manually without an `__EFMigrationsHistory` table, EF Core will attempt to execute `CREATE TABLE` and fail with a table collision error.
-> - The application **does not automatically migrate on startup**, keeping schema lifecycle management predictable, safe, and controlled via CLI.
-
-### 4. Run Backend API
-
-From the `MoneyMate.Api` folder, start the Web API service:
-
-```bash
-dotnet run --launch-profile http
-```
-
-The API service will start listening:
-- **API Base URL:** `http://localhost:5141`
-- **OpenAPI Schema Document:** `http://localhost:5141/openapi/v1.json`
-- **Health Check Endpoint:** `http://localhost:5141/api/MoneyMate/hello`
-
-### 5. Run Frontend Web App
-
-Open a **separate terminal window**, navigate to `moneymate-web`, install dependencies, and start the Vite dev server:
-
-```bash
-cd moneymate-web
-npm install
-npm run dev
-```
-
-The frontend will be available at:
-- **Web Application:** `http://localhost:5173`
-
-Open your browser and navigate to `http://localhost:5173` to start using MoneyMate.
-
----
-
-## API Endpoints Overview
-
-| Method | Endpoint | Description | Sample Payload / Parameters |
-| :--- | :--- | :--- | :--- |
-| **GET** | `/api/MoneyMate/hello` | API health check & connectivity status | — |
-| **GET** | `/api/transactions` | Retrieve all transactions (sorted date descending) | — |
-| **GET** | `/api/transactions/{id}` | Retrieve a single transaction by ID | `id`: integer |
-| **POST** | `/api/transactions` | Create a new transaction | `{"title":"Lunch","amount":50000,"type":"Expense","category":"Ăn uống","transactionDate":"2026-10-14T00:00:00"}` |
-| **PUT** | `/api/transactions/{id}` | Update an existing transaction | `{"title":"Monthly Salary","amount":15000000,"type":"Income","category":"Lương","transactionDate":"2026-10-14T00:00:00"}` |
-| **DELETE** | `/api/transactions/{id}` | Delete a transaction | `id`: integer |
-| **GET** | `/api/budgets/{year}/{month}` | Get monthly budget summary, expense sum & status | Example: `/api/budgets/2026/10` |
-| **PUT** | `/api/budgets/{year}/{month}` | Set or update monthly budget spending limit | `{"limitAmount": 5000000}` |
-| **GET** | `/api/savingsgoals` | Retrieve all savings goals | — |
-| **POST** | `/api/savingsgoals` | Create a new savings goal | `{"name":"Emergency Fund","targetAmount":10000000,"savedAmount":2000000,"targetDate":"2026-12-31T00:00:00"}` |
-| **PUT** | `/api/savingsgoals/{id}` | Update an existing savings goal | `{"name":"Laptop","targetAmount":25000000,"savedAmount":10000000,"targetDate":null}` |
-| **DELETE** | `/api/savingsgoals/{id}` | Delete a savings goal | `id`: integer |
-
----
-
-## Future Improvements
-
-- [ ] **Repository & Service Layer Pattern:** Introduce business service and repository abstractions to facilitate unit testing.
-- [ ] **Server-side Pagination & Filtering:** Add query pagination (`page`, `pageSize`) and server-side date range filtering.
-- [ ] **Interactive API Explorer (Swagger UI / Scalar):** Integrate visual interactive API testing UI at `/swagger` or `/scalar/v1`.
-- [ ] **User Authentication & Multi-Tenancy:** Implement JWT-based authentication (ASP.NET Core Identity) for individual user accounts.
-- [ ] **Automated Testing Suite:** Add unit tests for business logic and calculations (xUnit, Moq, Vitest).
-- [ ] **Data Export:** Export monthly financial reports to CSV and PDF formats.
-
----
-
-## Author & Contact
-
-- **Developer:** [Your Full Name]
-- **Target Role:** .NET Fresher / Intern Developer
-- **Email:** [your.email@example.com]
-- **LinkedIn:** [https://linkedin.com/in/your-profile]
+## 📄 License
+Dự án được phát triển cho mục đích học tập, nghiên cứu và quản lý tài chính cá nhân.
