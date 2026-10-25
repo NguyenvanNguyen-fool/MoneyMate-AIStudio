@@ -2,19 +2,18 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-  
     branches: ["main"]
 
-  # Cho phép chạy thủ công từ tab Actions
+  # Cho phép kích hoạt thủ công từ tab Actions
   workflow_dispatch:
 
-# Đặt quyền cho GITHUB_TOKEN để deploy
+# Phân quyền cho GITHUB_TOKEN để deploy
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Chỉ cho phép một deployment đồng thời
+# Chỉ cho phép một deployment chạy đồng thời
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -26,16 +25,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Bun/Node
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: 20
+          bun-version: latest
 
-      - name: Install dependencies (Bun)
-        run: npm install
+      - name: Install dependencies with Bun
+        run: bun install
 
       - name: Build project
-        run: npm run build
+        run: bun run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
